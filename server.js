@@ -40,6 +40,18 @@ io.on('connection', (socket) => {
       waitingUser = null;
     }
   });
+
+  socket.on('typing', () => {
+    if (socket.partner) {
+      socket.partner.emit('typing');
+    }
+  });
+
+  socket.on('stopTyping', () => {
+    if (socket.partner) {
+      socket.partner.emit('stopTyping');
+    }
+  });
 });
 
 server.listen(3000, () => {

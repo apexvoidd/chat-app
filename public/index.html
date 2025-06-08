@@ -7,12 +7,17 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <textarea id="chat" readonly></textarea>
-  <input id="msg" placeholder="Type your message..." autocomplete="off" />
-  <button id="send">Send</button>
-  <button id="new">New Chat</button>
+  <div id="chat" class="chat-container"></div>
+  <div id="typing-indicator" style="color: gray; font-style: italic; height: 20px;"></div>
+  
+  <div class="input-area">
+    <input id="msg" placeholder="Type your message..." autocomplete="off" />
+    <button id="send">Send</button>
+    <button id="new">New Chat</button>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
+
