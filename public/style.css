@@ -209,17 +209,14 @@ body.dark-theme #online-counter {
     font-size: 1em !important;
     box-sizing: border-box;
   }
-  #send, #new, #theme-toggle {
+  #send, #new {
     width: 100% !important;
     font-size: 1em !important;
     margin: 2px 0 !important;
     box-sizing: border-box;
   }
   #theme-toggle {
-    position: static !important;
-    margin-bottom: 10px !important;
-    width: 100% !important;
-    display: block !important;
+    display: none !important;
   }
   #online-counter {
     font-size: 1em !important;
