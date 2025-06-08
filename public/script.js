@@ -1,4 +1,13 @@
 const socket = io();
+
+// Listen for online user count and update the counter
+socket.on('onlineUsers', (count) => {
+  const counter = document.getElementById('online-counter');
+  if (counter) {
+    counter.textContent = `Online users: ${count}`;
+  }
+});
+
 const chat = document.getElementById('chat'); // now a div, not textarea
 const msg = document.getElementById('msg');
 const sendBtn = document.getElementById('send');
@@ -102,3 +111,60 @@ socket.on('typing', () => {
 socket.on('stopTyping', () => {
   typingIndicator.textContent = '';
 });
+
+// 11. Dark/Light Theme Toggle Feature
+
+// Add a theme toggle button to the page
+window.addEventListener('DOMContentLoaded', () => {
+  const container = document.querySelector('.container');
+  const themeBtn = document.createElement('button');
+  themeBtn.id = 'theme-toggle';
+  themeBtn.textContent = 'Change Theme';
+  themeBtn.style.position = 'absolute';
+  themeBtn.style.top = '10px';
+  themeBtn.style.right = '10px';
+  document.body.appendChild(themeBtn);
+
+  // Load theme from localStorage
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+  }
+
+  themeBtn.onclick = () => {
+    document.body.classList.toggle('dark-theme');
+    if (document.body.classList.contains('dark-theme')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  };
+});
+
+// Add dark theme styles
+const style = document.createElement('style');
+style.textContent = `
+  body.dark-theme {
+    background: #181818 !important;
+    color: #eee !important;
+  }
+  body.dark-theme .container {
+    background: #232323 !important;
+    color: #eee !important;
+  }
+  body.dark-theme input, body.dark-theme button {
+    background: #333 !important;
+    color: #eee !important;
+    border-color: #444 !important;
+  }
+  body.dark-theme .chat-container {
+    background: #222 !important;
+    color: #eee !important;
+  }
+  body.dark-theme .message.you {
+    background: #2a4d2a !important;
+  }
+  body.dark-theme .message.stranger {
+    background: #2a2a4d !important;
+  }
+`;
+document.head.appendChild(style);

@@ -9,8 +9,12 @@ const io = socketIo(server);
 app.use(express.static('public'));
 
 let waitingUser = null;
+let onlineUsers = 0;
 
 io.on('connection', (socket) => {
+  onlineUsers++;
+  io.emit('onlineUsers', onlineUsers);
+
   socket.isConnected = false; // Track connection state
 
   if (waitingUser) {
@@ -40,6 +44,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    onlineUsers--;
+    io.emit('onlineUsers', onlineUsers);
+
     if (socket.partner) {
       socket.partner.emit('system-message', 'Stranger disconnected.');
       socket.partner.partner = null;

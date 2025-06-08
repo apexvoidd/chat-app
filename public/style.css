@@ -120,6 +120,50 @@ button {
   background-color: #d32f2f;
 }
 
+#theme-toggle {
+  background-color: #607d8b;
+  color: #fff;
+}
+
+#theme-toggle:hover {
+  background-color: #455a64;
+}
+
+/* Dark theme overrides */
+body.dark-theme {
+  background: #181818 !important;
+  color: #f1f1f1 !important;
+}
+body.dark-theme .container {
+  background: #232323 !important;
+  color: #f1f1f1 !important;
+}
+body.dark-theme input, 
+body.dark-theme button {
+  background: #333 !important;
+  color: #f1f1f1 !important;
+  border-color: #444 !important;
+}
+body.dark-theme .chat-container,
+body.dark-theme #chat {
+  background: #222 !important;
+  color: #f1f1f1 !important;
+}
+body.dark-theme .message.you {
+  background: #2a4d2a !important;
+  color: #eaffea !important;
+}
+body.dark-theme .message.stranger {
+  background: #2a2a4d !important;
+  color: #eaeaff !important;
+}
+body.dark-theme .typing-indicator {
+  color: #b0b0b0 !important;
+}
+body.dark-theme #online-counter {
+  color: #f1f1f1 !important;
+}
+
 /* Responsive tweaks */
 @media (max-width: 480px) {
   .input-area {

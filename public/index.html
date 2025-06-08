@@ -5,19 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Random Chat</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Minimal improvements for better look */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      padding: 0 4px;
+    }
+    .header-title {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin: 0;
+      color: #4caf50;
+    }
+    #online-counter {
+      font-size: 1rem;
+      color: #f1f2f7;
+      background: #969191;
+      border-radius: 8px;
+      padding: 4px 12px;
+      min-width: 120px;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .header-bar {
+        flex-direction: column;
+        gap: 4px;
+        align-items: stretch;
+        text-align: center;
+      }
+      #online-counter {
+        text-align: center;
+        min-width: 0;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
+    <div class="header-bar">
+      <span class="header-title">Nevno</span>
+      <div id="online-counter">Online users: 0</div>
+    </div>
     <div id="chat" class="chat-container"></div>
-    <div id="typing-indicator" class="typing-indicator"> </div>
-    
+    <div id="typing-indicator" class="typing-indicator"></div>
     <div class="input-area">
       <input id="msg" placeholder="Type your message..." autocomplete="off" />
       <button id="send">Send</button>
       <button id="new">New Chat</button>
     </div>
   </div>
-
   <script src="/socket.io/socket.io.js"></script>
   <script src="script.js"></script>
 </body>
