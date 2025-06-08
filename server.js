@@ -11,12 +11,17 @@ app.use(express.static('public'));
 let waitingUser = null;
 
 io.on('connection', (socket) => {
+  socket.isConnected = false; // Track connection state
+
   if (waitingUser) {
     const partner = waitingUser;
     waitingUser = null;
 
     socket.partner = partner;
     partner.partner = socket;
+
+    socket.isConnected = true;
+    partner.isConnected = true;
 
     socket.emit('system-message', 'Connected to stranger!');
     partner.emit('system-message', 'Connected to stranger!');
@@ -26,8 +31,11 @@ io.on('connection', (socket) => {
   }
 
   socket.on('message', (msg) => {
-    if (socket.partner) {
+    // Only allow sending if connected
+    if (socket.partner && socket.isConnected) {
       socket.partner.emit('message', msg);
+    } else {
+      socket.emit('system-message', 'You are not connected to a stranger.');
     }
   });
 
@@ -35,6 +43,7 @@ io.on('connection', (socket) => {
     if (socket.partner) {
       socket.partner.emit('system-message', 'Stranger disconnected.');
       socket.partner.partner = null;
+      socket.partner.isConnected = false; // Mark partner as disconnected
     }
     if (waitingUser === socket) {
       waitingUser = null;
@@ -42,13 +51,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('typing', () => {
-    if (socket.partner) {
+    if (socket.partner && socket.isConnected) {
       socket.partner.emit('typing');
     }
   });
 
   socket.on('stopTyping', () => {
-    if (socket.partner) {
+    if (socket.partner && socket.isConnected) {
       socket.partner.emit('stopTyping');
     }
   });

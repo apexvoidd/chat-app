@@ -5,6 +5,9 @@ const sendBtn = document.getElementById('send');
 const newBtn = document.getElementById('new');
 const typingIndicator = document.getElementById('typing-indicator');
 
+// Disable send button by default until connected
+sendBtn.disabled = true;
+
 // Helper to add message bubbles
 function addMessage(text, sender) {
   const msgDiv = document.createElement('div');
@@ -30,7 +33,7 @@ socket.on('message', (data) => {
   addMessage(data, 'stranger');
 });
 
-// Receive system messages (show differently)
+// Receive system messages (show differently) and enable/disable send button
 socket.on('system-message', (data) => {
   const sysMsg = document.createElement('div');
   sysMsg.style.textAlign = 'center';
@@ -39,6 +42,18 @@ socket.on('system-message', (data) => {
   sysMsg.textContent = data;
   chat.appendChild(sysMsg);
   chat.scrollTop = chat.scrollHeight;
+
+  // Enable/disable send button based on connection state
+  if (data === 'Connected to stranger!') {
+    sendBtn.disabled = false;
+    msg.value = '';
+    msg.focus();
+  } else if (
+    data === 'Waiting for a partner...' ||
+    data === 'Stranger disconnected.'
+  ) {
+    sendBtn.disabled = true;
+  }
 });
 
 // Disconnect and refresh for new chat
@@ -56,11 +71,12 @@ socket.on('disconnect', () => {
   discMsg.textContent = 'You have disconnected.';
   chat.appendChild(discMsg);
   chat.scrollTop = chat.scrollHeight;
+  sendBtn.disabled = true;
 });
 
-// Send on Enter key
+// Send on Enter key, only if sendBtn is enabled
 msg.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
+  if (e.key === 'Enter' && !sendBtn.disabled) {
     e.preventDefault();
     sendBtn.click();
   }
@@ -70,12 +86,13 @@ msg.addEventListener('keypress', (e) => {
 let typingTimeout;
 
 msg.addEventListener('input', () => {
-  socket.emit('typing');
-
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    socket.emit('stopTyping');
-  }, 1000);
+  if (!sendBtn.disabled) {
+    socket.emit('typing');
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      socket.emit('stopTyping');
+    }, 1000);
+  }
 });
 
 socket.on('typing', () => {
